@@ -7,7 +7,7 @@
 
 	<body>
 		<h1>Corey Snyder</h1>
-		<img src="corey.jpeg">
+		<img src="corey.jpeg" alt="Corey Snyder">
 		<br>
 		<p>
 			<strong>Name:</strong> Corey <br>
@@ -55,7 +55,7 @@
 			<li>Super Nintendo</li>
 			<li>Atari</li>
 			<li>Nintendo Wii</li>
-			<li>Home computer- Linux</li>
+			<li>Home computer- Linux, XPS 13 Developer Edition</li>
 			<li>iPhone X iOS 11: 2436x1125px</li>
 		</ul>
 		<a href="index.php">Home</a>
