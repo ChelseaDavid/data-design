@@ -12,13 +12,14 @@
 		<h3>Profile</h3>
 		<ul>
 			<li>profileId (primary key)</li>
-			<li>profileQuestionId (foreign key)</li>
-			<li>profileAnswerId( foreign key)</li>
+			<li>profileNickname</li>
+			<li>profileLocation</li>
+			<li>profileEmail</li>
 		</ul>
 			<h3>Questions</h3>
 		<ul>
-			<li>questionID (primary key)</li>
-			<li>questionProfileId </li>
+			<li>questionId (primary key)</li>
+			<li>questionProfileId (foreign key) </li>
 			<li>questionLocation</li>
 			<li>questionText</li>
 			<li>questionsDate</li>
@@ -26,7 +27,8 @@
 			<h3>Answers</h3>
 		<ul>
 			<li>answerId(primary key)</li>
-			<li>answerProfileId</li>
+			<li>answerProfileId(foreign key)</li>
+			<li>answerQuestionId (foreign key)</li>
 			<li>answerEmail</li>
 			<li>answerLocation</li>
 			<li>answerText</li>
