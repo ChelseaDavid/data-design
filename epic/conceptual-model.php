@@ -39,6 +39,8 @@
 		<li>One user can answer many questions (1 to n)</li>
 		<li>One question can have many answers  (1 to n)</li>
 		</ul>
+		<img src="erd.jpg" alt="ERD Model">
+
 		<a href="index.php">Home</a>
 	</body>
 </html>
