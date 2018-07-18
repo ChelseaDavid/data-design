@@ -3,8 +3,7 @@
 
 /**
  * Small Cross Section of a GameStop answer
- *
-	This answer can be considered a small example of what services like GameStop store when reply's are sent
+ *this answer can be considered a small example of what services like GameStop store when reply's are sent
  * using GameStop. This can easily be extended to emulate more feature of GameStop.
  *
  * @author Chelsea David <cryan17@cnm.edu>
