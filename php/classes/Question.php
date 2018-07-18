@@ -1,4 +1,14 @@
 <?php
+
+/**
+ * Small Cross Section of a GameStop question
+ *
+ * This question can be considered a small example of what services like GameStop store when questions/messages are sent
+ * and received using GameStop. This can easily be extended to emulate more feature of GameStop.
+ *
+ * @author Chelsea David <cryan17@cnm.edu
+ * @version 1
+ **/
 class Question {
 	/**
 	 * id for this question; this is the primary key
