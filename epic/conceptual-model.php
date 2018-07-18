@@ -21,17 +21,14 @@
 			<li>questionId (primary key)</li>
 			<li>questionProfileId (foreign key) </li>
 			<li>questionLocation</li>
-			<li>questionText</li>
+			<li>questionContent</li>
 			<li>questionsDate</li>
 		</ul>
 			<h3>Answers</h3>
 		<ul>
-			<li>answerId(primary key)</li>
 			<li>answerProfileId(foreign key)</li>
 			<li>answerQuestionId (foreign key)</li>
-			<li>answerEmail</li>
-			<li>answerLocation</li>
-			<li>answerText</li>
+			<li>answerContent</li>
 			<li>answersDate</li>
 		</ul>
 		<h3>Relations</h3>
