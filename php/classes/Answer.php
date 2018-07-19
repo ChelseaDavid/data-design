@@ -33,6 +33,28 @@ class Answer {
 	 **/
 	private $answerDate;
 
+	/**
+	 * 	@param Uuid/string $newAnswerProfileId
+	 * 	@param string | Uuid $newAnswerQuestionId
+	 * 	@param string $newAnswerContent
+	 *  * @param \DateTime|string|null $newAnswerDate
+	 *	   @throws \ InvalidArgumentException
+	 * 	@throws \RangeException
+	 * 	@throws \TypeError
+	 **/
+
+	public function  __construct(string $newAnswerProfileId,string $newAnswerQuestionId, string $newAnswerContent,DateTime $newAnswerDate) {
+		try {
+			$this->setAnswerProfileId($newAnswerProfileId);
+			$this->setAnswerQuestionId($newAnswerQuestionId);
+			$this->setAnswerContent($newAnswerContent);
+			$this->setAnswerDate($newAnswerDate);
+
+		} catch(\InvalidArgumentException | \RangeException | \Exception | \TypeError $exception) {
+			$exceptionType = get_class($exception);
+			throw (new $exceptionType($exception->getMessage(), 0, $exception)) ;
+		}
+	}
 
 	/**
 	 * accessor method for answer profile id
