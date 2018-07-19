@@ -29,17 +29,18 @@ class Question {
 	 **/
 	private $questionDate;
 
-/**
- * 	@param Uuid/string $newQuestionId
- * 	@param string | Uuid $newQuestionProfileId
- * 	@param string $newQuestionContent
- *  * @param \DateTime|string|null $newQuestionDate
- *	   @throws \ InvalidArgumentException
- * 	@throws \RangeException
- * 	@throws \TypeError
- **/
+	/**
+	 * @param Uuid $newQuestionId
+	 * @param $newQuestionProfileId
+	 * @param $newQuestionContent
+	 * @param DateTime $newQuestionDate
+	 * @throws  InvalidArgumentException
+	 * @throws RangeException
+	 * @throws Exception
+	 * @throws TypeError
+	 **/
 
-	public function  __construct( $newQuestionId, $newQuestionProfileId, string $newQuestionContent,DateTime $newQuestionDate) {
+	public function __construct(string $newQuestionId,string $newQuestionProfileId, string $newQuestionContent,DateTime $newQuestionDate) {
 		try {
 			$this->setQuestionId($newQuestionId);
 			$this->setQuestionProfileId($newQuestionProfileId);
@@ -90,13 +91,12 @@ class Question {
 		 *
 		 * @param string | Uuid $newQuestionProfileId new value of question profile id
 		 * @throws \ InvalidArgumentException if $newQuestionProfileId is not a string or insecure
-		 * @throws \RangeException if $newProfileId is not positive
 		 * @throws \TypeError if @newQuestionProfileId is not an Uuid
 		 **/
       public function setQuestionProfileId( $newQuestionProfileId) : void {
       try {
-      	$uuid = self :: validateUuid($newQuestionProfileId);
-		} catch(\InvalidArgumentException | \RangeException | \Exception | \TypeError $exception) {
+      	$uuid = self::validateUuid($newQuestionProfileId);
+		} catch(\InvalidArgumentException | \Exception | \TypeError $exception) {
       	$exceptionType = get_class($exception);
       	throw(new $exceptionType($exception->getMessage(),0,$exception));
 		}
