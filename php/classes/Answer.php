@@ -34,13 +34,12 @@ class Answer {
 	private $answerDate;
 
 	/**
-	 * 	@param Uuid/string $newAnswerProfileId
-	 * 	@param string | Uuid $newAnswerQuestionId
-	 * 	@param string $newAnswerContent
-	 *  * @param \DateTime|string|null $newAnswerDate
-	 *	   @throws \ InvalidArgumentException
-	 * 	@throws \RangeException
-	 * 	@throws \TypeError
+	 * @param $newAnswerProfileId
+	 * @param $newAnswerQuestionId
+	 * @param $newAnswerContent
+	 * @param $newAnswerDate
+	 * @catch InvalidArgumentException | RangeException | Exception | TypeError
+	 * @throws Exception
 	 **/
 
 	public function  __construct(string $newAnswerProfileId,string $newAnswerQuestionId, string $newAnswerContent,DateTime $newAnswerDate) {
