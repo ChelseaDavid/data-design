@@ -29,6 +29,28 @@ class Question {
 	 **/
 	private $questionDate;
 
+/**
+ * 	@param Uuid/string $newQuestionId
+ * 	@param string | Uuid $newQuestionProfileId
+ * 	@param string $newQuestionContent
+ *  * @param \DateTime|string|null $newQuestionDate
+ *	   @throws \ InvalidArgumentException
+ * 	@throws \RangeException
+ * 	@throws \TypeError
+ **/
+
+	public function  __construct( $newQuestionId, $newQuestionProfileId, string $newQuestionContent,DateTime $newQuestionDate) {
+		try {
+			$this->setQuestionId($newQuestionId);
+			$this->setQuestionProfileId($newQuestionProfileId);
+			$this->setQuestionContent($newQuestionContent);
+			$this->setQuestionDate($newQuestionDate);
+
+		} catch(\InvalidArgumentException | \RangeException | \Exception | \TypeError $exception) {
+			$exceptionType = get_class($exception);
+			throw (new $exceptionType($exception->getMessage(), 0, $exception)) ;
+		}
+	}
 	/** accessor method for question id
 	 *
 	 * @return Uuid value of question id
@@ -67,6 +89,7 @@ class Question {
 		 * mutator method for question profile id
 		 *
 		 * @param string | Uuid $newQuestionProfileId new value of question profile id
+		 * @throws \ InvalidArgumentException if $newQuestionProfileId is not a string or insecure
 		 * @throws \RangeException if $newProfileId is not positive
 		 * @throws \TypeError if @newQuestionProfileId is not an Uuid
 		 **/
