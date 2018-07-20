@@ -42,7 +42,7 @@ class Answer {
 	 * @throws Exception
 	 **/
 
-	public function  __construct(string $newAnswerProfileId,string $newAnswerQuestionId, string $newAnswerContent,DateTime $newAnswerDate) {
+	public function __construct(string $newAnswerProfileId, string $newAnswerQuestionId, string $newAnswerContent, DateTime $newAnswerDate) {
 		try {
 			$this->setAnswerProfileId($newAnswerProfileId);
 			$this->setAnswerQuestionId($newAnswerQuestionId);
@@ -51,7 +51,7 @@ class Answer {
 
 		} catch(\InvalidArgumentException | \RangeException | \Exception | \TypeError $exception) {
 			$exceptionType = get_class($exception);
-			throw (new $exceptionType($exception->getMessage(), 0, $exception)) ;
+			throw (new $exceptionType($exception->getMessage(), 0, $exception));
 		}
 	}
 
@@ -60,8 +60,8 @@ class Answer {
 	 *
 	 * @return Uuid value of answer profile id
 	 **/
-	public function getAnswerProfileId() : Uuid{
-		return($this->answerProfileId);
+	public function getAnswerProfileId(): Uuid {
+		return ($this->answerProfileId);
 	}
 
 	/**
@@ -71,7 +71,7 @@ class Answer {
 	 * @throws \RangeException if $newAnswerProfileId is not positive
 	 * @throws \TypeError if $newAnswerProfileId is not an UUI
 	 **/
-	public function setAnswerProfileId( $newAnswerProfileId) : void {
+	public function setAnswerProfileId($newAnswerProfileId): void {
 		try {
 			$uuid = self::validateUuid($newAnswerProfileId);
 		} catch(\InvalidArgumentException | \RangeException | \Exception | \TypeError $exception) {
@@ -82,13 +82,14 @@ class Answer {
 		// convert and store the profile id
 		$this->answerProfileId = $uuid;
 	}
+
 	/**
 	 * accessor method for answer question id
 	 *
 	 * @return Uuid value of answer question id
 	 **/
-	public function getAnswerQuestionId() : Uuid{
-		return($this->answerQuestionId);
+	public function getAnswerQuestionId(): Uuid {
+		return ($this->answerQuestionId);
 	}
 
 	/**
@@ -98,7 +99,7 @@ class Answer {
 	 * @throws \RangeException if $newAnswerQuestionId is not positive
 	 * @throws \TypeError if $newAnswerQuestionId is not an UUI
 	 **/
-	public function setAnswerQuestionId( $newAnswerQuestionId) : void {
+	public function setAnswerQuestionId($newAnswerQuestionId): void {
 		try {
 			$uuid = self::validateUuid($newAnswerQuestionId);
 		} catch(\InvalidArgumentException | \RangeException | \Exception | \TypeError $exception) {
@@ -109,13 +110,14 @@ class Answer {
 		// convert and store the answer question id
 		$this->answerQuestionId = $uuid;
 	}
+
 	/**
 	 * accessor method for answer content
 	 *
 	 * @return string value of answer content
 	 **/
-	public function getAnswerContent() :string {
-		return($this->AnswerContent);
+	public function getAnswerContent(): string {
+		return ($this->AnswerContent);
 	}
 
 	/**
@@ -126,7 +128,7 @@ class Answer {
 	 * @throws \RangeException if $newAnswerContent is > 500 characters
 	 * @throws \TypeError if $newAnswerContent is not a string
 	 **/
-	public function setAnswerContent(string $newAnswerContent) : void {
+	public function setAnswerContent(string $newAnswerContent): void {
 		// verify the tweet content is secure
 		$newAnswerContent = trim($newAnswerContent);
 		$newAnswerContent = filter_var($newAnswerContent, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
@@ -148,8 +150,8 @@ class Answer {
 	 *
 	 * @return \DateTime value of answer date
 	 **/
-	public function getAnswerDate() : \DateTime {
-		return($this->answerDate);
+	public function getAnswerDate(): \DateTime {
+		return ($this->answerDate);
 	}
 
 	/**
@@ -159,7 +161,7 @@ class Answer {
 	 * @throws \InvalidArgumentException if $newAnswerDate is not a valid object or string
 	 * @throws \RangeException if $newAnswerDate is a date that does not exist
 	 **/
-	public function setAnswerDate($newAnswerDate = null) : void {
+	public function setAnswerDate($newAnswerDate = null): void {
 		// base case: if the date is null, use the current date and time
 		if($newAnswerDate === null) {
 			$this->answerDate = new \DateTime();
@@ -175,4 +177,5 @@ class Answer {
 		}
 		$this->answerDate = $newAnswerDate;
 	}
+
 }

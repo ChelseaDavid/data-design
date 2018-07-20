@@ -161,4 +161,190 @@ class Question {
 		}
 		$this->questionDate = $newQuestionDate;
 		}
+	/**
+	 * inserts this Question into mySQL
+	 *
+	 * @param \PDO $pdo PDO connection object
+	 * @throws \PDOException when mySQL related errors occur
+	 * @throws \TypeError if $pdo is not a PDO connection object
+	 **/
+	public function insert(\PDO $pdo) : void {
+		// create query template
+		$query = "INSERT INTO question(questionId, questionProfileId, questionContent, questionDate) VALUES(:questionId, :questionProfileId, :questionContent, :questionDate)";
+		$statement = $pdo->prepare($query);
+		// bind the member variables to the place holders in the template
+		$formattedDate = $this->tweetDate->format("Y-m-d H:i:s.u");
+		$parameters = ["questionId" => $this->questionId->getBytes(), "questionProfileId" => $this->questionProfileId->getBytes(), "questionContent" => $this->questionContent, "questionDate" => $formattedDate];
+		$statement->execute($parameters);
+	}
+	/**
+	 * deletes this question from mySQL
+	 *
+	 * @param \PDO $pdo PDO connection object
+	 * @throws \PDOException when mySQL related errors occur
+	 * @throws \TypeError if $pdo is not a PDO connection object
+	 **/
+	public function delete(\PDO $pdo) : void {
+		// create query template
+		$query = "DELETE FROM question WHERE questionId = :questionId";
+		$statement = $pdo->prepare($query);
+		// bind the member variables to the place holder in the template
+		$parameters = ["questionId" => $this->questionId->getBytes()];
+		$statement->execute($parameters);
+	}
+	/**
+	 * updates this question in mySQL
+	 *
+	 * @param \PDO $pdo PDO connection object
+	 * @throws \PDOException when mySQL related errors occur
+	 * @throws \TypeError if $pdo is not a PDO connection object
+	 **/
+	public function update(\PDO $pdo) : void {
+		// create query template
+		$query = "UPDATE question SET questionProfileId = :questionProfileId, questionContent = :questionContent, questionDate = :questionDate WHERE questionId = :questionId";
+		$statement = $pdo->prepare($query);
+		$formattedDate = $this->questionDate->format("Y-m-d H:i:s.u");
+		$parameters = ["questionId" => $this->questionId->getBytes(),"questionProfileId" => $this->questionProfileId->getBytes(), "questionContent" => $this->questionContent, "questionDate" => $formattedDate];
+		$statement->execute($parameters);
+	}
+	/**
+	 * gets the Question by questionId
+	 *
+	 * @param \PDO $pdo PDO connection object
+	 * @param string|Uuid $questionId question id to search for
+	 * @return Question|null Question found or null if not found
+	 * @throws \PDOException when mySQL related errors occur
+	 * @throws \TypeError when a variable are not the correct data type
+	 **/
+	public static function getQuestionByQuestionId(\PDO $pdo, $questionId) : ?Question {
+		// sanitize the tweetId before searching
+		try {
+			$questionId = self::validateUuid($questionId);
+		} catch(\InvalidArgumentException | \RangeException | \Exception | \TypeError $exception) {
+			throw(new \PDOException($exception->getMessage(), 0, $exception));
+		}
+		// create query template
+		$query = "SELECT questionId, questionProfileId, questionContent, questsionDate FROM question WHERE questionId = :questionId";
+		$statement = $pdo->prepare($query);
+		// bind the question id to the place holder in the template
+		$parameters = ["questionId" => $questionId->getBytes()];
+		$statement->execute($parameters);
+		// grab the question from mySQL
+		try {
+			$question = null;
+			$statement->setFetchMode(\PDO::FETCH_ASSOC);
+			$row = $statement->fetch();
+			if($row !== false) {
+				$question = new Question($row["questionId"], $row["questionProfileId"], $row["questionContent"], $row["questionDate"]);
+			}
+		} catch(\Exception $exception) {
+			// if the row couldn't be converted, rethrow it
+			throw(new \PDOException($exception->getMessage(), 0, $exception));
+		}
+		return($question);
+	}
+	/**
+	 * gets the Question by profile id
+	 *
+	 * @param \PDO $pdo PDO connection object
+	 * @param string $questionProfileId profile id to search by
+	 * @return \SplFixedArray SplFixedArray of Questions found
+	 * @throws \PDOException when mySQL related errors occur
+	 * @throws \TypeError when variables are not the correct data type
+	 **/
+	public static function getQuestionByQuestionProfileId(\PDO $pdo, string  $questionProfileId) : \SPLFixedArray {
+		try {
+			$questionProfileId = self::validateUuid($questionProfileId);
+		} catch(\InvalidArgumentException | \RangeException | \Exception | \TypeError $exception) {
+			throw(new \PDOException($exception->getMessage(), 0, $exception));
+		}
+		// create query template
+		$query = "SELECT questionId, questionProfileId, questionContent, questionDate FROM question WHERE questionProfileId = :questionProfileId";
+		$statement = $pdo->prepare($query);
+		// bind the question profile id to the place holder in the template
+		$parameters = ["questionProfileId" => $questionProfileId->getBytes()];
+		$statement->execute($parameters);
+		// build an array of questions
+		$questions = new \SplFixedArray($statement->rowCount());
+		$statement->setFetchMode(\PDO::FETCH_ASSOC);
+		while(($row = $statement->fetch()) !== false) {
+			try {
+				$question = new Question($row["questionId"], $row["questionProfileId"], $row["questionContent"], $row["questionDate"]);
+				$questions[$questions->key()] = $question;
+				$questions->next();
+			} catch(\Exception $exception) {
+				// if the row couldn't be converted, rethrow it
+				throw(new \PDOException($exception->getMessage(), 0, $exception));
+			}
+		}
+		return($questions);
+	}
+	/**
+	 * gets the Question by content
+	 *
+	 * @param \PDO $pdo PDO connection object
+	 * @param string $questionContent question content to search for
+	 * @return \SplFixedArray SplFixedArray of Questions found
+	 * @throws \PDOException when mySQL related errors occur
+	 * @throws \TypeError when variables are not the correct data type
+	 **/
+	public static function getQuestionByQuestionContent(\PDO $pdo, string $questionContent) : \SPLFixedArray {
+		// sanitize the description before searching
+		$questionContent = trim($questionContent);
+		$questionContent = filter_var($questionContent, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
+		if(empty($questionContent) === true) {
+			throw(new \PDOException("question content is invalid"));
+		}
+		// escape any mySQL wild cards
+		$questionContent = str_replace("_", "\\_", str_replace("%", "\\%", $questionContent));
+		// create query template
+		$query = "SELECT questionId, questionProfileId, questionContent, questionDate FROM question WHERE questionContent LIKE :questionContent";
+		$statement = $pdo->prepare($query);
+		// bind the question content to the place holder in the template
+		$questionContent = "%$questionContent%";
+		$parameters = ["questionContent" => $questionContent];
+		$statement->execute($parameters);
+		// build an array of questions
+		$questions = new \SplFixedArray($statement->rowCount());
+		$statement->setFetchMode(\PDO::FETCH_ASSOC);
+		while(($row = $statement->fetch()) !== false) {
+			try {
+				$question = new Question($row["questionId"], $row["questionProfileId"], $row["questionContent"], $row["questionDate"]);
+				$questions[$questions->key()] = $question;
+				$questions->next();
+			} catch(\Exception $exception) {
+				// if the row couldn't be converted, rethrow it
+				throw(new \PDOException($exception->getMessage(), 0, $exception));
+			}
+		}
+		return($questions);
+	}
+	/**
+	 * gets all Questions
+	 *
+	 * @param \PDO $pdo PDO connection object
+	 * @return \SplFixedArray SplFixedArray of Questions found or null if not found
+	 * @throws \PDOException when mySQL related errors occur
+	 * @throws \TypeError when variables are not the correct data type
+	 **/
+	public static function getAllQuestions(\PDO $pdo) : \SPLFixedArray {
+		// create query template
+		$query = "SELECT questionId, questionProfileId, questionContent, questionDate FROM question";
+		$statement = $pdo->prepare($query);
+		$statement->execute();
+		// build an array of questions
+		$questions = new \SplFixedArray($statement->rowCount());
+		$statement->setFetchMode(\PDO::FETCH_ASSOC);
+		while(($row = $statement->fetch()) !== false) {
+			try {
+				$question = new Question($row["questionId"], $row["questionProfileId"], $row["questionContent"], $row["questionDate"]);
+				$questions[$questions->key()] = $question;
+				$questions->next();
+			} catch(\Exception $exception) {
+				// if the row couldn't be converted, rethrow it
+				throw(new \PDOException($exception->getMessage(), 0, $exception));
+			}
+		}
+		return ($questions);
+	}
 }

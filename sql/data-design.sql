@@ -53,3 +53,4 @@ CREATE TABLE answer (
 	-- finally, create a composite foreign key with the two foreign keys
 	PRIMARY KEY(answerProfileId, answerQuestionId)
 );
+
