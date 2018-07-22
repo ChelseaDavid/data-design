@@ -29,7 +29,7 @@ class Answer {
 
 	/**
 	 * date and time this Answer was sent, in a PHP DateTime object
-	 * @var \DateTime $AnswertDate
+	 * @var \DateTime $AnswerDate
 	 **/
 	private $answerDate;
 
@@ -129,7 +129,7 @@ class Answer {
 	 * @throws \TypeError if $newAnswerContent is not a string
 	 **/
 	public function setAnswerContent(string $newAnswerContent): void {
-		// verify the tweet content is secure
+		// verify the answer content is secure
 		$newAnswerContent = trim($newAnswerContent);
 		$newAnswerContent = filter_var($newAnswerContent, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
 		if(empty($newAnswerContent) === true) {
@@ -141,7 +141,7 @@ class Answer {
 			throw(new \RangeException("Answer content exceeds the max number of characters allowed. Please try again."));
 		}
 
-		// store the tweet content
+		// store the answer content
 		$this->answerContent = $newAnswerContent;
 	}
 
@@ -168,13 +168,7 @@ class Answer {
 			return;
 		}
 
-		// store the like date using the ValidateDate trait
-		try {
-			$newAnswerDate = self::validateDateTime($newAnswerDate);
-		} catch(\InvalidArgumentException | \RangeException $exception) {
-			$exceptionType = get_class($exception);
-			throw(new $exceptionType($exception->getMessage(), 0, $exception));
-		}
+
 		$this->answerDate = $newAnswerDate;
 	}
 

@@ -152,13 +152,7 @@ class Question {
 			$this->questionDate = new \DateTime();
 			return;
 		}
-		// store the like date using the ValidateDate trait
-		try {
-			$newQuestionDate = self::validateDateTime($newQuestionDate);
-		} catch(\InvalidArgumentException|\RangeException $exception) {
-			$exceptionType = get_class($exception);
-			throw (new $exceptionType($exception->getMessage(),0, $exception));
-		}
+
 		$this->questionDate = $newQuestionDate;
 		}
 	/**
@@ -173,7 +167,7 @@ class Question {
 		$query = "INSERT INTO question(questionId, questionProfileId, questionContent, questionDate) VALUES(:questionId, :questionProfileId, :questionContent, :questionDate)";
 		$statement = $pdo->prepare($query);
 		// bind the member variables to the place holders in the template
-		$formattedDate = $this->tweetDate->format("Y-m-d H:i:s.u");
+		$formattedDate = $this->questionDate->format("Y-m-d H:i:s.u");
 		$parameters = ["questionId" => $this->questionId->getBytes(), "questionProfileId" => $this->questionProfileId->getBytes(), "questionContent" => $this->questionContent, "questionDate" => $formattedDate];
 		$statement->execute($parameters);
 	}
@@ -217,14 +211,14 @@ class Question {
 	 * @throws \TypeError when a variable are not the correct data type
 	 **/
 	public static function getQuestionByQuestionId(\PDO $pdo, $questionId) : ?Question {
-		// sanitize the tweetId before searching
+		// sanitize the questionId before searching
 		try {
 			$questionId = self::validateUuid($questionId);
 		} catch(\InvalidArgumentException | \RangeException | \Exception | \TypeError $exception) {
 			throw(new \PDOException($exception->getMessage(), 0, $exception));
 		}
 		// create query template
-		$query = "SELECT questionId, questionProfileId, questionContent, questsionDate FROM question WHERE questionId = :questionId";
+		$query = "SELECT questionId, questionProfileId, questionContent, questionDate FROM question WHERE questionId = :questionId";
 		$statement = $pdo->prepare($query);
 		// bind the question id to the place holder in the template
 		$parameters = ["questionId" => $questionId->getBytes()];
