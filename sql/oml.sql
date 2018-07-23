@@ -23,4 +23,4 @@
 
 -- SELECT questionContent, questionDate FROM question WHERE questionDate="2018-03-22 03:22:45.123";
 
-UPDATE question SET questionContent = "How many times has MDav been to blame?" WHERE questionContent = "Has Matt D ever not been to blame?";
+-- UPDATE question SET questionContent = "How many times has MDav been to blame?" WHERE questionContent = "Has Matt D ever not been to blame?";
