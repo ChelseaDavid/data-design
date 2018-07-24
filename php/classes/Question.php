@@ -1,5 +1,11 @@
 <?php
 
+
+namespace ChelseaDavid\DataDesign;
+require_once(dirname(__DIR__, 2) . "/vendor/autoload.php");
+use Ramsey\Uuid\Uuid;
+
+
 /**
  * Small Cross Section of a GameStop question
  *
@@ -9,7 +15,8 @@
  * @author Chelsea David <cryan17@cnm.edu
  * @version 1
  **/
-class Question {
+class Question implements \JsonSerializable {
+	use ValidateUuid;
 	/**
 	 * id for this question; this is the primary key
 	 * @var Uuid $questionId
@@ -40,7 +47,7 @@ class Question {
 	 * @throws TypeError
 	 **/
 
-	public function __construct(string $newQuestionId,string $newQuestionProfileId, string $newQuestionContent,DateTime $newQuestionDate) {
+	public function __construct(string $newQuestionId,string $newQuestionProfileId, string $newQuestionContent,string $newQuestionDate) {
 		try {
 			$this->setQuestionId($newQuestionId);
 			$this->setQuestionProfileId($newQuestionProfileId);
@@ -135,9 +142,9 @@ class Question {
 		 * @return \DateTime value of question date
 		 * **/
 	/**
-	 * @return DateTime
+	 * @return \DateTime
 	 */
-	public function getQuestionDate(): DateTime {
+	public function getQuestionDate(): \DateTime {
 		return $this->questionDate;
 	}
 	/** mutator method for question date
@@ -164,7 +171,8 @@ class Question {
 	 **/
 	public function insert(\PDO $pdo) : void {
 		// create query template
-		$query = "INSERT INTO question(questionId, questionProfileId, questionContent, questionDate) VALUES(:questionId, :questionProfileId, :questionContent, :questionDate)";
+		$query = "INSERT INTO question(questionId, questionProfileId, questionContent, questionDate) 
+						VALUES(:questionId, :questionProfileId, :questionContent, :questionDate)";
 		$statement = $pdo->prepare($query);
 		// bind the member variables to the place holders in the template
 		$formattedDate = $this->questionDate->format("Y-m-d H:i:s.u");
