@@ -2,7 +2,8 @@
 
 
 namespace ChelseaDavid\DataDesign;
-require_once(dirname(__DIR__, 2) . "/vendor/autoload.php");
+require_once ("autoload.php");
+require_once(dirname(__DIR__, 2) .  "../vendor/autoload.php");
 use Ramsey\Uuid\Uuid;
 
 
@@ -15,7 +16,7 @@ use Ramsey\Uuid\Uuid;
  * @author Chelsea David <cryan17@cnm.edu
  * @version 1
  **/
-class Question implements \JsonSerializable {
+class Question  {
 	use ValidateUuid;
 	/**
 	 * id for this question; this is the primary key
